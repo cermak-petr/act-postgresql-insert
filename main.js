@@ -90,7 +90,7 @@ Apify.main(async () => {
     // set global executionId
     Apify.client.setOptions({executionId: input._id});
     
-    // insert all results to MySQL
+    // insert all results to the DB
     async function processResults(poolQuery, results){
         for(let i = 0; i < results.length; i += rowSplit){
             const insert = await createInsert(poolQuery, results, i, rowSplit, data.table, data.staticParam);
@@ -109,7 +109,7 @@ Apify.main(async () => {
         const poolQuery = Promise.promisify(pool.query, {context: pool});
         const poolEnd = Promise.promisify(pool.end, {context: pool});
         
-        // loop through pages of results and insert them to MySQL
+        // loop through pages of results and insert them to the DB
         if(input._id){
             const limit = 200;
             let total = -1, offset = 0;
