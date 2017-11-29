@@ -1,9 +1,9 @@
-# act-mysql-insert
+# act-postgresql-insert
 
-Apify act for inserting crawler results into a remote MySQL table.
+Apify act for inserting crawler results into a remote PostgreSQL table.
 
 This act fetches all results from a specified Apifier crawler execution and inserts them into
-a table in a remote MySQL database.
+a table in a remote PostgreSQL database.
 
 The act does not store its state, i.e. if it crashes it restarts fetching all URLs.
 Therefore you should only use it for short lists of URLs.
@@ -18,10 +18,11 @@ Input is a JSON object with the following properties:
     // crawler executionID
     "_id": "your_execution_id",
 
-    // MySQL connection credentials
+    // PostgreSQL connection credentials
     "data": {
         "connection": {
           "host"      : "host_name",
+          "port"      : "port_number"
           "user"      : "user_name",
           "password"  : "user_password",
           "database"  : "database_name"
