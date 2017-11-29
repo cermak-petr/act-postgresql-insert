@@ -22,7 +22,7 @@ Input is a JSON object with the following properties:
     "data": {
         "connection": {
           "host"      : "host_name",
-          "port"      : "port_number"
+          "port"      : "port_number",
           "user"      : "user_name",
           "password"  : "user_password",
           "database"  : "database_name"
