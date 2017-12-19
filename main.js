@@ -121,7 +121,7 @@ Apify.main(async () => {
                 offset += limit;
             }
         }
-        else{await processResults(poolQuery, rows);}
+        else{await processResults(poolQuery, input.rows);}
         
         const records = await poolQuery('select * from ' + data.table);
         console.dir(records);
