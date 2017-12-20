@@ -113,7 +113,7 @@ Apify.main(async () => {
         if(input._id){
             const limit = 200;
             let total = -1, offset = 0;
-            while(total === -1 || offset + limit < total){
+            while(total === -1 || offset < total){
                 const lastResults = await Apify.client.crawlers.getExecutionResults({limit: limit, offset: offset});
                 const results = _.chain(lastResults.items).pluck('pageFunctionResult').flatten().value();
                 await processResults(poolQuery, results);
