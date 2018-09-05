@@ -26,6 +26,22 @@ function getAllKeys(results, start, length){
     return Object.keys(keys);
 }
 
+// iterate items from dataset
+const loadItems = async (datasetId, process, offset) => {  
+    const limit = 100;
+    if(!offset){offset = 0;}
+    console.log('starting to load from dataset');
+    const newItems = await Apify.client.datasets.getItems({
+        datasetId, 
+        offset,
+        limit
+    });
+    if(newItems && newItems.items && newItems.items.length > 0){
+        await process(newItems.items);
+        await loadItems(datasetId, process, offset + limit);
+    }
+};
+
 // get column names of a table
 async function getColumnNames(query, table){
     const result = await query('select column_name, data_type, character_maximum_length from INFORMATION_SCHEMA.COLUMNS where table_name = \'' + table + '\'');
@@ -76,7 +92,7 @@ Apify.main(async () => {
     // get Act input and validate it
     const input = await Apify.getValue('INPUT');
     const data = input.data ? (typeof input.data === 'string' ? JSON.parse(input.data) : input.data) : {};
-    if(!input._id && !input.rows){
+    if(!input._id && !input.rows && !input.datasetId){
         return console.log('missing "_id" or "rows" attribute in INPUT');
     }
     if(!data.connection){
@@ -120,6 +136,11 @@ Apify.main(async () => {
                 total = lastResults.total;
                 offset += limit;
             }
+        }
+        else if(input.datasetId){
+            await loadItems(input.datasetId, async(results) => {
+                await processResults(poolQuery, results);
+            });
         }
         else{await processResults(poolQuery, input.rows);}
         
